@@ -1,0 +1,21 @@
+<h1>Shopping List</h1>
+<p>Week of <%= @meal_plan.week_start_date.strftime("%B %d, %Y") %></p>
+
+<% if @shopping_list.any? %>
+  <ul>
+    <% @shopping_list.each do |item| %>
+      <li>
+        <strong><%= item[:ingredient].name.capitalize %></strong>
+        &mdash;
+        <%= item[:quantity] % 1 == 0 ? item[:quantity].to_i : item[:quantity] %>
+        <%= item[:unit] %>
+      </li>
+    <% end %>
+  </ul>
+
+  <button onclick="window.print()">Print / Save as PDF</button>
+<% else %>
+  <p>Nothing to buy &mdash; your pantry covers everything on the plan.</p>
+<% end %>
+
+<%= link_to "Back to Meal Plan", meal_plan_path(@meal_plan) %>

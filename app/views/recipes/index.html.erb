@@ -1,0 +1,53 @@
+<h1>Recipes</h1>
+
+<%= form_with url: recipes_path, method: :get do |f| %>
+  <%= f.text_field :ingredients,
+      value: @ingredient_query,
+      placeholder: "e.g. chicken, garlic, lemon" %>
+  <%= f.submit "Find Recipes" %>
+  <% if @ingredient_query.present? %>
+    <%= link_to "Clear", recipes_path %>
+  <% end %>
+<% end %>
+
+<% if @all_tags.any? %>
+  <div>
+    Filter by tag:
+    <%= link_to "All", recipes_path(ingredients: @ingredient_query.presence) %>
+    <% @all_tags.each do |tag| %>
+      <%= link_to tag.name, recipes_path(tag: tag.name, ingredients: @ingredient_query.presence) %>
+    <% end %>
+  </div>
+<% end %>
+
+<% if user_signed_in? %>
+  <%= link_to "New Recipe", new_recipe_path %>
+  <%= link_to "My Meal Plan", my_meal_plan_path %>
+<% end %>
+
+<% if @recipes.any? %>
+  <% @recipes.each do |recipe| %>
+    <div>
+      <h2><%= link_to recipe.title, recipe_path(recipe) %></h2>
+
+      <% if @searched_names.present? %>
+        <% recipe_ingredient_names = recipe.recipe_ingredients.map { |ri| ri.ingredient.name } %>
+        <% matched = recipe_ingredient_names & @searched_names %>
+        <% total = recipe.recipe_ingredients.size %>
+        <p>You have <%= matched.size %> of <%= total %> ingredients</p>
+      <% end %>
+
+      <p>
+        <% if recipe.prep_time %>Prep: <%= recipe.prep_time %> min<% end %>
+        <% if recipe.cook_time %> &middot; Cook: <%= recipe.cook_time %> min<% end %>
+        <% if recipe.servings %> &middot; Serves <%= recipe.servings %><% end %>
+      </p>
+    </div>
+  <% end %>
+<% else %>
+  <% if @ingredient_query.present? %>
+    <p>No recipes found with those ingredients.</p>
+  <% else %>
+    <p>No recipes yet.</p>
+  <% end %>
+<% end %>
