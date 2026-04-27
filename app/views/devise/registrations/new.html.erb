@@ -1,0 +1,37 @@
+<div class="min-h-[60vh] flex items-center justify-center">
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 w-full max-w-md">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">Create an account</h1>
+    <p class="text-sm text-gray-500 mb-8">Start saving recipes and planning meals</p>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "space-y-5" }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div>
+        <%= f.label :email, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
+      </div>
+
+      <div>
+        <%= f.label :password, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <% if @minimum_password_length %>
+          <p class="text-xs text-gray-400 mb-1"><%= @minimum_password_length %> characters minimum</p>
+        <% end %>
+        <%= f.password_field :password, autocomplete: "new-password",
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700 mb-1" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password",
+            class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
+      </div>
+
+      <%= f.submit "Sign up", class: "w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-lg hover:bg-emerald-700 cursor-pointer transition-colors" %>
+    <% end %>
+
+    <div class="mt-6 space-y-2 text-center text-sm text-gray-500">
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

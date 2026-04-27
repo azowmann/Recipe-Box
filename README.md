@@ -2,7 +2,7 @@
 
 A personal recipe management app built with Ruby on Rails. You tell it what ingredients you have, it finds recipes you can make, you plan your week on a meal calendar, and it generates a shopping list for what's missing.
 
-**Live demo:** _coming soon (Fly.io / Render deployment)_
+**Live demo:** https://recipe-box-rkan.onrender.com
 **Demo login:** `demo@recipebox.dev` / `password123`
 
 ---

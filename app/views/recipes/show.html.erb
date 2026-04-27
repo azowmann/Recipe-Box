@@ -1,40 +1,78 @@
-<h1><%= @recipe.title %></h1>
+<div class="mb-6">
+  <%= link_to "← Recipes", recipes_path, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" %>
+</div>
 
-<% if @recipe.photo.attached? %>
-  <%= image_tag @recipe.photo, style: "max-width: 600px;" %>
-<% end %>
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+  <% if @recipe.photo.attached? %>
+    <%= image_tag @recipe.photo, class: "w-full h-72 object-cover" %>
+  <% end %>
 
-<p><%= @recipe.description %></p>
+  <div class="p-8">
+    <div class="flex items-start justify-between gap-4 mb-4">
+      <h1 class="text-3xl font-bold text-gray-900"><%= @recipe.title %></h1>
+      <% if user_signed_in? && @recipe.user == current_user %>
+        <div class="flex gap-2 shrink-0">
+          <%= link_to "Edit", edit_recipe_path(@recipe),
+              class: "text-sm text-gray-600 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors" %>
+          <%= button_to "Delete", recipe_path(@recipe),
+              method: :delete,
+              data: { turbo_confirm: "Delete this recipe?" },
+              class: "text-sm text-red-600 border border-red-200 rounded-lg px-4 py-2 bg-transparent hover:bg-red-50 cursor-pointer transition-colors" %>
+        </div>
+      <% end %>
+    </div>
 
-<ul>
-  <% if @recipe.prep_time %><li>Prep: <%= @recipe.prep_time %> min</li><% end %>
-  <% if @recipe.cook_time %><li>Cook: <%= @recipe.cook_time %> min</li><% end %>
-  <% if @recipe.servings %><li>Serves: <%= @recipe.servings %></li><% end %>
-</ul>
-
-<% if @recipe.recipe_ingredients.any? %>
-  <h2>Ingredients</h2>
-  <ul>
-    <% @recipe.recipe_ingredients.includes(:ingredient).each do |ri| %>
-      <li><%= ri.quantity %> <%= ri.unit %> <%= ri.ingredient.name %></li>
+    <% if @recipe.description.present? %>
+      <p class="text-gray-600 text-lg mb-6 leading-relaxed"><%= @recipe.description %></p>
     <% end %>
-  </ul>
-<% end %>
 
-<% if @recipe.tags.any? %>
-  <p>
-    <% @recipe.tags.each do |tag| %>
-      <%= link_to tag.name, recipes_path(tag: tag.name) %>
+    <div class="flex flex-wrap gap-6 text-sm text-gray-500 mb-6 pb-6 border-b border-gray-100">
+      <% if @recipe.prep_time %>
+        <span><span class="font-semibold text-gray-700">Prep</span>&nbsp;&nbsp;<%= @recipe.prep_time %> min</span>
+      <% end %>
+      <% if @recipe.cook_time %>
+        <span><span class="font-semibold text-gray-700">Cook</span>&nbsp;&nbsp;<%= @recipe.cook_time %> min</span>
+      <% end %>
+      <% if @recipe.servings %>
+        <span><span class="font-semibold text-gray-700">Serves</span>&nbsp;&nbsp;<%= @recipe.servings %></span>
+      <% end %>
+    </div>
+
+    <% if @recipe.tags.any? %>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <% @recipe.tags.each do |tag| %>
+          <%= link_to tag.name, recipes_path(tag: tag.name),
+              class: "px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-full hover:bg-emerald-100 transition-colors" %>
+        <% end %>
+      </div>
     <% end %>
-  </p>
-<% end %>
 
-<h2>Instructions</h2>
-<%= simple_format @recipe.instructions %>
+    <div class="grid sm:grid-cols-2 gap-10">
+      <% if @recipe.recipe_ingredients.any? %>
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Ingredients</h2>
+          <ul class="space-y-2">
+            <% @recipe.recipe_ingredients.includes(:ingredient).each do |ri| %>
+              <li class="flex items-start gap-3 text-sm text-gray-700">
+                <span class="mt-2 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                <span>
+                  <span class="font-medium">
+                    <%= ri.quantity % 1 == 0 ? ri.quantity.to_i : ri.quantity %> <%= ri.unit %>
+                  </span>
+                  <%= ri.ingredient.name %>
+                </span>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-<% if user_signed_in? && @recipe.user == current_user %>
-  <%= link_to "Edit", edit_recipe_path(@recipe) %>
-  <%= button_to "Delete", recipe_path(@recipe), method: :delete, data: { turbo_confirm: "Delete this recipe?" } %>
-<% end %>
-
-<%= link_to "Back", recipes_path %>
+      <div>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Instructions</h2>
+        <div class="text-sm text-gray-700 leading-relaxed space-y-3">
+          <%= simple_format @recipe.instructions %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

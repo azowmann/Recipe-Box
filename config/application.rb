@@ -38,5 +38,7 @@ module RecipeBox
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.assets.paths << Rails.root.join("app/assets/builds")
   end
 end

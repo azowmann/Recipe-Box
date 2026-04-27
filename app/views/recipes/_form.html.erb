@@ -1,56 +1,58 @@
-<%= form_with model: recipe do |f| %>
+<%= form_with model: recipe, class: "space-y-6" do |f| %>
   <% if recipe.errors.any? %>
-    <div>
+    <div class="rounded-lg bg-red-50 border border-red-200 p-4 space-y-1">
       <% recipe.errors.full_messages.each do |msg| %>
-        <p><%= msg %></p>
+        <p class="text-sm text-red-700"><%= msg %></p>
       <% end %>
     </div>
   <% end %>
 
   <div>
-    <%= f.label :title %>
-    <%= f.text_field :title %>
+    <%= f.label :title, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_field :title, class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
   </div>
 
   <div>
-    <%= f.label :description %>
-    <%= f.text_area :description, rows: 3 %>
+    <%= f.label :description, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_area :description, rows: 3, class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
   </div>
 
   <div>
-    <%= f.label :instructions %>
-    <%= f.text_area :instructions, rows: 8 %>
+    <%= f.label :instructions, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <p class="text-xs text-gray-500 mb-1">Number each step (e.g. 1. Preheat oven...)</p>
+    <%= f.text_area :instructions, rows: 10, class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <div>
+      <%= f.label :prep_time, "Prep (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :prep_time, min: 1, class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
+    </div>
+    <div>
+      <%= f.label :cook_time, "Cook (min)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :cook_time, min: 1, class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
+    </div>
+    <div>
+      <%= f.label :servings, class: "block text-sm font-medium text-gray-700 mb-1" %>
+      <%= f.number_field :servings, min: 1, class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
+    </div>
   </div>
 
   <div>
-    <%= f.label :prep_time, "Prep time (minutes)" %>
-    <%= f.number_field :prep_time, min: 1 %>
+    <%= f.label :tag_names, "Tags (comma-separated)", class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.text_field :tag_names, value: recipe.tag_names, placeholder: "e.g. vegetarian, quick, italian",
+        class: "w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" %>
   </div>
 
   <div>
-    <%= f.label :cook_time, "Cook time (minutes)" %>
-    <%= f.number_field :cook_time, min: 1 %>
+    <%= f.label :photo, class: "block text-sm font-medium text-gray-700 mb-1" %>
+    <%= f.file_field :photo, accept: "image/*", class: "text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" %>
   </div>
 
-  <div>
-    <%= f.label :servings %>
-    <%= f.number_field :servings, min: 1 %>
+  <div class="flex items-center gap-3">
+    <%= f.check_box :public, class: "h-4 w-4 text-emerald-600 border-gray-300 rounded" %>
+    <%= f.label :public, "Make this recipe public", class: "text-sm text-gray-700" %>
   </div>
 
-  <div>
-    <%= f.label :public, "Make this recipe public?" %>
-    <%= f.check_box :public %>
-  </div>
-
-  <div>
-    <%= f.label :tag_names, "Tags (comma-separated, e.g. vegetarian, quick, Italian)" %>
-    <%= f.text_field :tag_names, value: recipe.tag_names %>
-  </div>
-
-  <div>
-    <%= f.label :photo %>
-    <%= f.file_field :photo, accept: "image/*" %>
-  </div>
-
-  <%= f.submit %>
+  <%= f.submit class: "w-full bg-emerald-600 text-white text-sm font-semibold py-3 rounded-lg hover:bg-emerald-700 cursor-pointer transition-colors" %>
 <% end %>

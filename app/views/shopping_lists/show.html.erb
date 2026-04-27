@@ -1,21 +1,33 @@
-<h1>Shopping List</h1>
-<p>Week of <%= @meal_plan.week_start_date.strftime("%B %d, %Y") %></p>
+<div class="mb-6">
+  <%= link_to "← Meal Plan", meal_plan_path(@meal_plan), class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" %>
+</div>
 
-<% if @shopping_list.any? %>
-  <ul>
-    <% @shopping_list.each do |item| %>
-      <li>
-        <strong><%= item[:ingredient].name.capitalize %></strong>
-        &mdash;
-        <%= item[:quantity] % 1 == 0 ? item[:quantity].to_i : item[:quantity] %>
-        <%= item[:unit] %>
-      </li>
-    <% end %>
-  </ul>
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-xl mx-auto">
+  <div class="flex items-start justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Shopping List</h1>
+      <p class="text-sm text-gray-500 mt-1">Week of <%= @meal_plan.week_start_date.strftime("%B %d, %Y") %></p>
+    </div>
+    <button onclick="window.print()" class="text-sm font-medium text-gray-600 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 cursor-pointer transition-colors">
+      Print / PDF
+    </button>
+  </div>
 
-  <button onclick="window.print()">Print / Save as PDF</button>
-<% else %>
-  <p>Nothing to buy &mdash; your pantry covers everything on the plan.</p>
-<% end %>
-
-<%= link_to "Back to Meal Plan", meal_plan_path(@meal_plan) %>
+  <% if @shopping_list.any? %>
+    <ul class="divide-y divide-gray-50">
+      <% @shopping_list.each do |item| %>
+        <li class="flex items-center justify-between py-3">
+          <span class="text-sm font-medium text-gray-900"><%= item[:ingredient].name.capitalize %></span>
+          <span class="text-sm text-gray-500">
+            <%= item[:quantity] % 1 == 0 ? item[:quantity].to_i : item[:quantity] %>
+            <%= item[:unit] %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-gray-400">Your pantry covers everything on the plan.</p>
+    </div>
+  <% end %>
+</div>

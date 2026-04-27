@@ -1,3 +1,8 @@
-<h1>Edit Recipe</h1>
-<%= render "form", recipe: @recipe %>
-<%= link_to "Back", recipe_path(@recipe) %>
+<div class="mb-6">
+  <%= link_to "← #{@recipe.title}", recipe_path(@recipe), class: "text-sm text-gray-500 hover:text-gray-700 transition-colors" %>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold text-gray-900 mb-8">Edit Recipe</h1>
+  <%= render "form", recipe: @recipe %>
+</div>

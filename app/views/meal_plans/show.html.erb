@@ -1,43 +1,57 @@
-<h1>Meal Plan — Week of <%= @meal_plan.week_start_date.strftime("%B %d, %Y") %></h1>
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Meal Plan</h1>
+    <p class="text-sm text-gray-500 mt-1">Week of <%= @meal_plan.week_start_date.strftime("%B %d, %Y") %></p>
+  </div>
+  <div class="flex gap-3">
+    <%= link_to "Shopping List", meal_plan_shopping_list_path(@meal_plan),
+        class: "text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg px-4 py-2 transition-colors" %>
+    <%= link_to "Recipes", recipes_path,
+        class: "text-sm font-medium text-gray-600 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors" %>
+  </div>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Day</th>
-      <% MealPlanEntry::MEAL_TYPES.each do |meal| %>
-        <th><%= meal.capitalize %></th>
-      <% end %>
-    </tr>
-  </thead>
-  <tbody>
-    <% MealPlan::DAYS.each_with_index do |day, index| %>
-      <tr>
-        <td><strong><%= day %></strong></td>
-        <% MealPlanEntry::MEAL_TYPES.each do |meal_type| %>
-          <td>
-            <% entry = @entries[[index, meal_type]] %>
-            <% if entry %>
-              <%= entry.recipe.title %>
-              <%= button_to "Remove",
-                  meal_plan_meal_plan_entry_path(@meal_plan, entry),
-                  method: :delete,
-                  data: { turbo_confirm: "Remove this meal?" } %>
-            <% else %>
-              <%= form_with url: meal_plan_meal_plan_entries_path(@meal_plan) do |f| %>
-                <%= f.hidden_field :day_of_week, value: index %>
-                <%= f.hidden_field :meal_type, value: meal_type %>
-                <%= f.select :recipe_id,
-                    @recipes.map { |r| [r.title, r.id] },
-                    { include_blank: "— pick a recipe —" } %>
-                <%= f.submit "Add" %>
-              <% end %>
-            <% end %>
-          </td>
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-x-auto">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="border-b border-gray-100">
+        <th class="text-left px-6 py-4 font-semibold text-gray-700 w-28">Day</th>
+        <% MealPlanEntry::MEAL_TYPES.each do |meal| %>
+          <th class="text-left px-6 py-4 font-semibold text-gray-700"><%= meal.capitalize %></th>
         <% end %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<%= link_to "Shopping List", meal_plan_shopping_list_path(@meal_plan) %>
-<%= link_to "Back", recipes_path %>
+    </thead>
+    <tbody>
+      <% MealPlan::DAYS.each_with_index do |day, index| %>
+        <tr class="border-b border-gray-50 last:border-0">
+          <td class="px-6 py-4 font-semibold text-gray-900"><%= day %></td>
+          <% MealPlanEntry::MEAL_TYPES.each do |meal_type| %>
+            <td class="px-4 py-3">
+              <% entry = @entries[[index, meal_type]] %>
+              <% if entry %>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm text-gray-800 font-medium"><%= entry.recipe.title %></span>
+                  <%= button_to "×",
+                      meal_plan_meal_plan_entry_path(@meal_plan, entry),
+                      method: :delete,
+                      data: { turbo_confirm: "Remove this meal?" },
+                      class: "text-gray-400 hover:text-red-500 bg-transparent border-0 cursor-pointer text-lg leading-none transition-colors" %>
+                </div>
+              <% else %>
+                <%= form_with url: meal_plan_meal_plan_entries_path(@meal_plan), class: "flex gap-2 items-center" do |f| %>
+                  <%= f.hidden_field :day_of_week, value: index %>
+                  <%= f.hidden_field :meal_type, value: meal_type %>
+                  <%= f.select :recipe_id,
+                      @recipes.map { |r| [r.title, r.id] },
+                      { include_blank: "— pick —" },
+                      class: "border border-gray-200 rounded-lg px-2 py-1 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 max-w-36" %>
+                  <%= f.submit "Add", class: "text-xs font-medium text-emerald-600 border border-emerald-200 rounded-lg px-3 py-1 hover:bg-emerald-50 cursor-pointer transition-colors bg-transparent" %>
+                <% end %>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
