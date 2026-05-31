@@ -22,7 +22,7 @@ gem "jbuilder"
 gem "devise"
 
 # Background Jobs
-gem "sidekiq", "~> 7.0"
+gem "sidekiq", "~> 8.1"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
